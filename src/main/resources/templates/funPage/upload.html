@@ -7,44 +7,32 @@
 <link href="http://www.francescomalagrino.com/BootstrapPageGenerator/3/css/bootstrap-combined.min.css" rel="stylesheet" media="screen">
 <script type="text/javascript" src="http://www.francescomalagrino.com/BootstrapPageGenerator/3/js/bootstrap.min.js"></script>
 <script>
-	// function fileSelected() {
-	// 	var file = document.getElementById('fileToUpload').files[0];
-	// 	if (file) {
-	// 		var fileSize = 0;
-	// 		if (file.size > 1024 * 1024)
-	// 			fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
-	// 		else
-	// 			fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
-	//
-	// 		document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
-	// 		document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
-	// 		document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
-	// 	}
-	// }
-
 	function uploadFile() {
 		var fd = new FormData();
 		fd.append("file", document.getElementById('file').files[0]);
 		var xhr = new XMLHttpRequest();
-		xhr.upload.addEventListener("progress", uploadProgress, false);
+		//xhr.upload.addEventListener("progress", uploadProgress, false);
+		xhr.upload.addEventListener("progress", changeStyle, false);
 		// xhr.addEventListener("load", uploadComplete, false);
 		// xhr.addEventListener("error", uploadFailed, false);
 		// xhr.addEventListener("abort", uploadCanceled, false);
 		xhr.open("POST", "/toUpLoad",true)
 		xhr.send(fd);
 	}
-
-	function uploadProgress(evt) {
-		console.log("@@@")
+	function changeStyle(evt) {
+		console.log("进来聊聊")
 		if (evt.lengthComputable) {
 			var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-			document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+			document.getElementById("pro").style.width = percentComplete.toString() + '%';
+			if (percentComplete < 100) {
+				document.getElementById('pro').innerHTML = "正在上传请稍后";
+			} else {
+				document.getElementById('pro').innerHTML = "正在转换，转换完成将跳转到首页"
+			}
 		}
 		else {
-			document.getElementById('progressNumber').innerHTML = '无法计算';
+			document.getElementById('pro').innerHTML = '20%';
 		}
-
-
 	}
 </script>
 </head>
@@ -59,7 +47,9 @@
 		</div>
 	</div>
 	<div class="row-fluid">
-		<div class="span12">
+		<div class="span4">
+		</div>
+		<div class="span4">
 			<h3>
 				欢迎上传
 			</h3>
@@ -73,19 +63,19 @@
 				<div class="control-group">
 					 <label class="control-label" for="anotherName">文件名</label>
 					<div class="controls">
-						<input id="anotherName" type="text" name="anotherName"/>
+						<input id="anotherName" placeholder="请输入您想要保存的名字" type="text" name="anotherName"/>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="filedetail">描述</label>
 					<div class="controls">
-						<input id="filedetail" type="text" name="filedetail"/>
+						<textarea id="filedetail" placeholder="请输入文件描述，方便您查找" type="text" name="filedetail" maxlength="500" style="height: 100px"></textarea>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="upperson">上传者</label>
 					<div class="controls">
-						<input id="upperson" type="text" name="upperson"/>
+						<input id="upperson" placeholder="请输入您的用户名" type="text" name="upperson"/>
 					</div>
 				</div>
 				<div class="control-group">
@@ -93,11 +83,26 @@
 						<button type="submit" class="btn" onclick="uploadFile()">上传</button>
 					</div>
 				</div>
+				<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="progress progress-success active progress-striped">
+								<div class="bar" id="pro" style="width: 0%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-				<div id="progressNumber">进度</div>
+<!--				<div id="progressNumber">等待上传</div>-->
+
 			</form>
 		</div>
+		<div class="span4">
+		</div>
 	</div>
+
 </div>
 </body>
+
 </html>

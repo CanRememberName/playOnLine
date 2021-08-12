@@ -27,6 +27,13 @@ public class FileController {
         ArrayList<String> source = new ArrayList<>();
         //由于编号是主键，所以需要将其调整为从一开始
         //获取大小
+        //现在默认每页显示10个记录
+        int size = list.size();
+        //页数
+        int pageNUm = size / 10;
+        if (size % 10 != 0){
+            pageNUm++;
+        }
         for (int i = 0; i < list.size(); i++) {
             list.get(i).setFileId(i+1);
             source.add(new IpUtils().sourceAddress(list.get(i)));
@@ -87,7 +94,7 @@ public class FileController {
             //设置别名
             needInsert.setAnotherName(file.getName());
             //设置上传者
-            needInsert.setUpPerson(new IpUtils().getIPofUser(request));
+            needInsert.setUpPerson("dihuangkaijia");
             fileService.insertFile(needInsert);
         }
         return "redirect:/allFile";

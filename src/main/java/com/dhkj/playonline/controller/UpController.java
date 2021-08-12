@@ -48,6 +48,9 @@ public class UpController {
             format = "0" + format;
         }
         myFile.setFileLength(format + "MB");
+        if ("".equals(anotherName.trim())) {
+            anotherName = filename;
+        }
         myFile.setAnotherName(anotherName);
         myFile.setFileDetail(filedetail);
         myFile.setUpPerson(upperson);

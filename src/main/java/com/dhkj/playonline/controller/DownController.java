@@ -64,10 +64,13 @@ public class DownController {
         com.dhkj.playonline.pojo.File myFile = fileService.searchFileByAnotherName(name);
 
         String path = "D:\\res\\v6speedDownload\\qiangujuecheng\\";
-
+        String path2 = "D:\\res\\pic";
         //获取文件名
         String filename = myFile.getFileName();
         File file = new File(path,filename);
+        if (!file.exists()) {
+            file = new File(path2,filename);
+        }
         long length = file.length();
 
         response.reset();//设置页面不缓存
