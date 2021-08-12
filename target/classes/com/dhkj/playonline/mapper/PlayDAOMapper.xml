@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhkj.playonline.dao.PlayDAO">
+
+    <!--增加一条播放记录-->
+    <insert id="insertPlayTime" parameterType="PlayTime" useGeneratedKeys="true" keyProperty="id">
+        insert into forupanddownload.playtime(fileName, playTime, userIp) VALUES (#{fileName},#{playTime},#{userIp})
+    </insert>
+
+    <!--增加一次播放-->
+    <update id="updatePlayTime" parameterType="String">
+        update forupanddownload.playtime set playTime = playtime.playTime + 1  where fileName = #{filename} and userIp = #{userIp};
+    </update>
+
+    <select id="slectPlayTimeByFileName" resultType="PlayTime">
+        select * from forupanddownload.playtime where fileName = #{filename} and userIp = #{userIp}
+    </select>
+</mapper>
