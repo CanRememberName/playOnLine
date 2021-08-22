@@ -6,6 +6,7 @@ import com.dhkj.playonline.service.FileServiceImpl;
 import com.dhkj.playonline.utils.FileUtils;
 import com.dhkj.playonline.utils.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,14 @@ public class FileController {
     private FileServiceImpl fileService;
 
     @RequestMapping("/allFile")
-    public String allFile(Model model) {
+    public String allFile(Model model, @RequestParam("page") String page1) {
         List<File> list = fileService.getAllFile();
         ArrayList<String> source = new ArrayList<>();
         //由于编号是主键，所以需要将其调整为从一开始
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setFileId(i+1);
+            source.add(new IpUtils().sourceAddress(list.get(i)));
+        }
         //获取大小
         //现在默认每页显示10个记录
         int size = list.size();
@@ -34,13 +39,30 @@ public class FileController {
         if (size % 10 != 0){
             pageNUm++;
         }
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).setFileId(i+1);
-            source.add(new IpUtils().sourceAddress(list.get(i)));
+        int page = Integer.valueOf(page1);
+        if (page <= pageNUm) {
+            List<File> rlist = new ArrayList<>();
+            int begin = (page-1) * 10;
+            int end = page * 10 - 1;
+            for (int i = begin; i <= end; i++) {
+                if (i >= size) {
+                    break;
+                }
+                rlist.add(list.get(i));
+            }
+            model.addAttribute("list",rlist);
+            model.addAttribute("source", source);
+            model.addAttribute("size",list.size());
         }
-        model.addAttribute("list",list);
-        model.addAttribute("source", source);
-        model.addAttribute("size",list.size());
+        ArrayList<Integer> pages = new ArrayList<>();
+        for (int i = 0; i < pageNUm; i++) {
+            pages.add(i+1);
+        }
+        model.addAttribute("pageNum",pages);
+        model.addAttribute("Maxpage",pageNUm);
+        model.addAttribute("beforePage",page-1);
+        model.addAttribute("afterPage",page+1);
+        System.out.println(pages.size());
         return "funPage/allFile";
     }
 
@@ -58,18 +80,13 @@ public class FileController {
     @RequestMapping("/scan")
     public String scanAllFile(HttpServletRequest request) {
         java.io.File path = new java.io.File("D:/res/pic/");
-        java.io.File path1 = new java.io.File("D:/res/v6speedDownload/qiangujuecheng/");
+        java.io.File path1 = new java.io.File("D:/res/v6speedDownload/");
         FileUtils fileUtils = new FileUtils();
         ArrayList<java.io.File> files = new ArrayList<>();
         fileUtils.scanFile(files, path);
-        for (java.io.File file : files) {
-            System.out.println(file.getName());
-        }
-        System.out.println("========");
+        System.out.println("已扫描" + path);
         fileUtils.scanFile(files,path1);
-        for (java.io.File file : files) {
-            System.out.println(file.getName());
-        }
+        System.out.println("已扫描" + path1);
         //删除数据库中的文件
         fileService.deleteAllFileBeforeSearch();
         for (java.io.File file : files) {

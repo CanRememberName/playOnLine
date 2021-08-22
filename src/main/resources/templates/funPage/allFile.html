@@ -1,5 +1,5 @@
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
 	<meta charset="UTF-8">
 <script type="text/javascript" src="http://www.francescomalagrino.com/BootstrapPageGenerator/3/js/jquery-2.0.0.min.js"></script>
 <script type="text/javascript" src="http://www.francescomalagrino.com/BootstrapPageGenerator/3/js/jquery-ui"></script>
@@ -147,29 +147,17 @@
 						</tbody>
 					</table>
 					<div class="pagination pagination-right">
-						<ul>
+						<li style="display: inline" th:if="${beforePage} ge 1">
+							<a th:href="@{/allFile(page=${beforePage})}">上一页</a>
+						</li>
+						<ul th:each="page:${pageNum}">
 							<li>
-								<a href="#">上一页</a>
-							</li>
-							<li>
-								<a href="#">1</a>
-							</li>
-							<li>
-								<a href="#">2</a>
-							</li>
-							<li>
-								<a href="#">3</a>
-							</li>
-							<li>
-								<a href="#">4</a>
-							</li>
-							<li>
-								<a href="#">5</a>
-							</li>
-							<li>
-								<a href="#">下一页</a>
+								<a th:href="@{/allFile(page=${page})}" th:text="${page}" style="display: inline"></a>
 							</li>
 						</ul>
+						<li style="display: inline" th:if="${afterPage} le ${Maxpage}">
+							<a th:href="@{/allFile(page=${afterPage})}">下一页</a>
+						</li>
 					</div>
 				</div>
 

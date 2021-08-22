@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**").addResourceLocations("file:D:/res/pic/").addResourceLocations("file:D:/res/v6speedDownload/qiangujuecheng/");
+        registry.addResourceHandler("/img/**").addResourceLocations("file:D:/res/pic/").addResourceLocations("file:D:/res/v6speedDownload/qiangujuecheng/")
+                .addResourceLocations("file:D:/res/v6speedDownload/tianjimiyu/")
+                .addResourceLocations("file:D:/res/v6speedDownload/liangyi/");
     }
 }

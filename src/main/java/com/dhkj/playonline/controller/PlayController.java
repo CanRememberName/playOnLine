@@ -50,6 +50,7 @@ public class PlayController {
         }
         String path = "http://" + ip4.getHostAddress() + ":8080" + "/img/" + fileName;
         System.out.println(path);
+        model.addAttribute("path", path);
         model.addAttribute("source", path);
         String imgPath = "http://" + ip4.getHostAddress() + ":8080" + "/img/team.jpg";
         //添加播放前的图像
